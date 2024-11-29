@@ -1,0 +1,31 @@
+{
+  "tasks": {
+    "build": {
+      "description": "compile the deno runtime",
+      "command": "deno compile --allow-read --output=$RUNTIME_BINARY main.ts"
+    },
+    "clean": {
+      "description": "clean up directory",
+      "command": "rm $RUNTIME_BINARY && rm docs -rf"
+    },
+    "run": {
+      "description": "run the deno compiled setup",
+      "command": "$RUNTIME_BINARY",
+      "dependencies": [
+        "build"
+      ]
+    },
+    "dev": {
+      "description": "run deno app without compile",
+      "command": "deno run -A main.ts"
+    },
+    "docs": {
+      "description": "generate static docs",
+      "command": "deno doc --html main.ts"
+    }
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/cli": "jsr:@std/cli@^1.0.7"
+  }
+}

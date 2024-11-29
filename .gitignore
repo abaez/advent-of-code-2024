@@ -1,0 +1,25 @@
+# Temporary files, for example, from tests.
+/tmp/
+
+# ignore swp files
+.*.swp
+.swp
+
+# direnv ignores
+.direnv/*
+
+# ignore cache for mix
+.cache
+
+# ignore db files
+*.db
+*.db*
+
+# ignore result directory
+result
+
+# ignore binary
+*2024
+
+# ignore docs generation
+docs
