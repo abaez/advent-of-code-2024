@@ -6,7 +6,7 @@ A [Deno inspired][1] take of Advent of Code
 
 ## 1. Description
 
-[Advent of Code][2] is an event on doing twenty five coding challenges on December. Here's a small take of doing the set up with using [Deno]][3]. Mostly cause [author here][4] wants stickers!
+[Advent of Code][2] is an event on doing twenty five coding challenges on December. Here's a small take of doing the set up with using [Deno][3]. Mostly cause [author here][4] wants stickers!
 
 ## 2. Usage
 
