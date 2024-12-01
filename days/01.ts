@@ -1,18 +1,18 @@
 import { Answer } from "../src/types.ts";
 
-export interface Part1Data {
+export interface DataPart1 {
   first: Array<number>;
   second: Array<number>;
 }
 
 interface QuestionOptions {
-  part1Data: Part1Data;
+  dataPart1: DataPart1;
 }
 
 /** Store question part1 */
 export class Question {
   /** the initial data for part 1 */
-  readonly part1Data: Part1Data;
+  readonly dataPart1: DataPart1;
 
   /**
    * @param file the file to read
@@ -20,9 +20,9 @@ export class Question {
    */
   constructor(file: string, options?: QuestionOptions) {
     if (options !== undefined) {
-      this.part1Data = options.part1Data;
+      this.dataPart1 = options.dataPart1;
     } else {
-      this.part1Data = this.readPart1(file);
+      this.dataPart1 = this.readPart1(file);
     }
   }
 
@@ -30,7 +30,7 @@ export class Question {
    * Reads a file provided
    * @param file the file to read for data
    */
-  private readPart1(file: string): Part1Data {
+  private readPart1(file: string): DataPart1 {
     return {
       first: [],
       second: [],
@@ -41,9 +41,16 @@ export class Question {
   distanceSum(): number {
     return 0;
   }
+
+  /** sort the data given */
+  sort(): DataPart1 {
+    return {
+      first: this.dataPart1.first.sort(),
+      second: this.dataPart1.second.sort(),
+    };
+  }
 }
 
-/** Provides result output of day done */
 export function result(): Answer {
   return {};
 }
