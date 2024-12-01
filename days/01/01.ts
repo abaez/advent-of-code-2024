@@ -5,6 +5,11 @@ export interface DataPart1 {
   second: Array<number>;
 }
 
+export interface DataPart2 {
+  /** a map containing repeats from left and right */
+  repeats: Map<number, [left: number, right: number]>;
+}
+
 interface QuestionOptions {
   dataPart1: DataPart1;
 }
@@ -13,6 +18,8 @@ interface QuestionOptions {
 export class Question {
   /** the initial data for part 1 */
   readonly dataPart1: DataPart1;
+  /** the data for part 2 */
+  readonly dataPart2: DataPart2;
 
   /**
    * @param file the file to read
@@ -24,6 +31,8 @@ export class Question {
     } else {
       this.dataPart1 = this.readPart1(file);
     }
+
+    this.dataPart2 = this.populatePart2();
   }
 
   /**
@@ -51,6 +60,39 @@ export class Question {
     return data;
   }
 
+  /** generate the record map for part 2 */
+  private populatePart2(): DataPart2 {
+    const data: DataPart2 = {
+      repeats: new Map(),
+    };
+
+    // set up keys first to identify the repeats
+    for (const key of this.dataPart1.first) {
+      if (data.repeats.has(key)) {
+        const repeats = data.repeats.get(key);
+
+        const left = repeats?.[0] == undefined ? 1 : repeats?.[0] + 1;
+        data.repeats.set(key, [left, 0]);
+      } else {
+        data.repeats.set(key, [1, 0]);
+      }
+    }
+
+    // set up values of repeat
+    for (const same of this.dataPart1.second) {
+      if (data.repeats.has(same)) {
+        const repeats = data.repeats.get(same);
+
+        const left = repeats?.[0] == undefined ? 0 : repeats?.[0];
+        const right = repeats?.[1] == undefined ? 1 : repeats?.[1] + 1;
+
+        data.repeats.set(same, [left, right]);
+      }
+    }
+
+    return data;
+  }
+
   /** Get distance sum for the array */
   distanceSum(): number {
     const sorted = this.sort();
@@ -65,7 +107,14 @@ export class Question {
 
   /** Get distance sum for the two lists by multiples of same */
   distanceSame(): number {
-    return 0;
+    let sum = 0;
+
+    this.dataPart2.repeats.forEach(([left, right], key, _) => {
+      console.log(key, left, right);
+      sum += left * right * key;
+    });
+
+    return sum;
   }
 
   /** Sort the data given for part 1 */
