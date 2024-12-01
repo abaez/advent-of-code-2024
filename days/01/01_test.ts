@@ -27,3 +27,13 @@ Deno.test("can get distance", () => {
 
   assertEquals(actual, expect);
 });
+
+Deno.test("can get distance with similarity", () => {
+  const expect = 31;
+
+  const question = new Question(sample);
+
+  const actual = question.distanceSame();
+
+  assertEquals(actual, expect);
+});

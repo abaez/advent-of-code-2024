@@ -63,6 +63,11 @@ export class Question {
     return sum;
   }
 
+  /** Get distance sum for the two lists by multiples of same */
+  distanceSame(): number {
+    return 0;
+  }
+
   /** Sort the data given for part 1 */
   private sort(): DataPart1 {
     return {
