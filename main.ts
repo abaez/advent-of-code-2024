@@ -1,4 +1,4 @@
-import { result as day01 } from "./days/01.ts";
+import { result as day01 } from "./days/01/01.ts";
 import { handleArgs } from "./src/flags.ts";
 import { Answer, dayRange } from "./src/types.ts";
 

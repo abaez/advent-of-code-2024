@@ -1,4 +1,4 @@
-import { Answer, open } from "../src/types.ts";
+import { Answer, open } from "../../src/types.ts";
 
 export interface DataPart1 {
   first: Array<number>;
@@ -74,7 +74,7 @@ export class Question {
 
 /** result method used for all other actions */
 export function result(): Answer {
-  const part1 = new Question("./days/01_part1.txt");
+  const part1 = new Question("./days/01/01_part1.txt");
 
   return {
     part1: part1.distanceSum().toString(),
