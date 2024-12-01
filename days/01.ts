@@ -27,7 +27,7 @@ export class Question {
   }
 
   /**
-   * Reads a file provided
+   * Reads a file provided for part1
    * @param file the file to read for data
    */
   private readPart1(file: string): DataPart1 {
@@ -51,7 +51,7 @@ export class Question {
     return data;
   }
 
-  /** get distance sum for the array */
+  /** Get distance sum for the array */
   distanceSum(): number {
     const sorted = this.sort();
     let sum = 0;
@@ -63,8 +63,8 @@ export class Question {
     return sum;
   }
 
-  /** sort the data given */
-  sort(): DataPart1 {
+  /** Sort the data given for part 1 */
+  private sort(): DataPart1 {
     return {
       first: this.dataPart1.first.sort(),
       second: this.dataPart1.second.sort(),
@@ -72,6 +72,11 @@ export class Question {
   }
 }
 
+/** result method used for all other actions */
 export function result(): Answer {
-  return {};
+  const part1 = new Question("./days/01_part1.txt");
+
+  return {
+    part1: part1.distanceSum().toString(),
+  };
 }
