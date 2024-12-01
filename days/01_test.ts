@@ -6,7 +6,7 @@ const SamplePart1: DataPart1 = {
   second: [4, 3, 5, 3, 9, 3],
 };
 
-const sample = "01_sample.txt";
+const sample = "days/01_sample.txt";
 
 Deno.test("can get result", () => {
   assertEquals(result(), {});
@@ -17,7 +17,7 @@ Deno.test("can read data", () => {
 
   const question = new Question(sample);
 
-  assertEquals(expect, question.dataPart1);
+  assertEquals(question.dataPart1, expect);
 });
 
 Deno.test("can get distance", () => {
@@ -29,5 +29,5 @@ Deno.test("can get distance", () => {
 
   const actual = question.distanceSum();
 
-  assertEquals(expect, actual);
+  assertEquals(actual, expect);
 });

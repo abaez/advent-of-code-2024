@@ -20,4 +20,4 @@
 
 # run deno tests
 @test:
-    deno test
+    deno test --allow-read

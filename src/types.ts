@@ -17,3 +17,11 @@ export function dayRange(): number[] {
   const start = 1;
   return [...Array(DAYS - start + 1).keys()].map((i) => i + start);
 }
+
+/**
+ * Read a file and output each line as string
+ * @param file the file to open
+ */
+export function open(file: string): string[] {
+  return Deno.readTextFileSync(file).split("\n");
+}

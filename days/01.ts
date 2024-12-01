@@ -1,4 +1,4 @@
-import { Answer } from "../src/types.ts";
+import { Answer, open } from "../src/types.ts";
 
 export interface DataPart1 {
   first: Array<number>;
@@ -31,15 +31,36 @@ export class Question {
    * @param file the file to read for data
    */
   private readPart1(file: string): DataPart1 {
-    return {
-      first: [],
-      second: [],
-    };
+    const data: DataPart1 = { first: [], second: [] };
+    const fr = open(file);
+
+    for (const line of fr) {
+      const split = line.split("  ");
+
+      const first = parseInt(split[0]);
+      const second = parseInt(split[1]);
+
+      if (isNaN(first) && isNaN(second)) {
+        break;
+      }
+
+      data.first.push(first);
+      data.second.push(second);
+    }
+
+    return data;
   }
 
   /** get distance sum for the array */
   distanceSum(): number {
-    return 0;
+    const sorted = this.sort();
+    let sum = 0;
+
+    for (const i in sorted.first) {
+      sum += Math.abs(sorted.first[i] - sorted.second[i]);
+    }
+
+    return sum;
   }
 
   /** sort the data given */
