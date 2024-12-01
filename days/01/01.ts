@@ -110,7 +110,6 @@ export class Question {
     let sum = 0;
 
     this.dataPart2.repeats.forEach(([left, right], key, _) => {
-      console.log(key, left, right);
       sum += left * right * key;
     });
 
@@ -128,9 +127,10 @@ export class Question {
 
 /** result method used for all other actions */
 export function result(): Answer {
-  const part1 = new Question("./days/01/01_part1.txt");
+  const question = new Question("./days/01/01_part1.txt");
 
   return {
-    part1: part1.distanceSum().toString(),
+    part1: question.distanceSum().toString(),
+    part2: question.distanceSame().toString(),
   };
 }
