@@ -16,3 +16,13 @@ Deno.test("can read data", () => {
 
   assertEquals(actual, expect);
 });
+
+Deno.test("can know safety", () => {
+  const expect = 2;
+
+  const question = new Question(sample);
+
+  const actual = question.sumSafety();
+
+  assertEquals(actual, expect);
+});

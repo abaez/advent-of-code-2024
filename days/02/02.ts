@@ -70,6 +70,17 @@ export class Question {
     this.part1 = this.readPart1(file);
   }
 
+  /** Find how many safe rows */
+  sumSafety(): number {
+    let sum = 0;
+
+    for (const row of this.part1.data) {
+      sum += row.safe ? 1 : 0;
+    }
+
+    return sum;
+  }
+
   /**
    * Reads the part1 file provided
    * @param file  the file to read for data
