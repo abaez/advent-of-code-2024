@@ -22,3 +22,13 @@ Deno.test("can know safety", () => {
 
   assertEquals(actual, expect);
 });
+
+Deno.test("can remove single failure", () => {
+  const expect = 4;
+
+  const question = new Question(sample);
+
+  const actual = question.sumSafetyJustOne();
+
+  assertEquals(actual, expect);
+});

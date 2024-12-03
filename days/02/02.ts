@@ -28,6 +28,7 @@ class Report implements ReportType {
 
   /**
    * @param line the raw string to produce a Row from
+   * @param justOne sets whether to ignore one level wrong
    */
   constructor(line: string) {
     const split = line.split(" ");
@@ -38,20 +39,59 @@ class Report implements ReportType {
       const second = parseInt(arr[idx + 1]);
 
       if (!isNaN(second)) {
-        const direction = this.directionType(first, second);
-
-        if (this.direction == undefined) {
-          this.direction = direction;
-        } else if (direction != this.direction) {
-          this.safe = false;
-        }
-
-        if (!this.inRange(first, second)) this.safe = false;
+        const isSafe = this.isSafe(first, second);
+        if (!isSafe) this.safe = isSafe;
       }
 
       // always make sure to write as long as a number
       if (!isNaN(first)) this.row[idx] = first;
     });
+  }
+
+  /**
+   * Checks if two levels are safe or not
+   * @param first the first number to check
+   * @param second the second number to check
+   */
+  isSafe(first: number, second: number): boolean {
+    const direction = this.directionType(first, second);
+
+    if (this.direction == undefined) {
+      this.direction = direction;
+    } else if (direction != this.direction) {
+      return false;
+    }
+
+    if (!this.inRange(first, second)) return false;
+
+    return true;
+  }
+
+  /** readjust the row popping 1 error */
+  readjust(): Report {
+    const report = new Report("");
+
+    for (const i of this.row.keys()) {
+      const [first, second] = [this.row[i], this.row[i + 1]];
+      if (!isNaN(second)) {
+        if (!report.isSafe(first, second)) {
+          report.direction = this.direction;
+          report.row = this.row.toSpliced(i, 1);
+          report.safe = true;
+          break;
+        }
+      }
+    }
+
+    report.row.map((level, idx, arr) => {
+      const [first, second] = [level, arr[idx + 1]];
+      if (!isNaN(second)) {
+        // revert back to unsafe if more than 1 error
+        if (!report.inRange(first, second)) report.safe = false;
+      }
+    });
+
+    return report;
   }
 
   /**
@@ -84,11 +124,15 @@ export class Question {
   /** @field part1 data from part 1 */
   readonly part1: DataPart1;
 
+  /** field part2 data from part 2 */
+  part2: DataPart1;
+
   /**
    * @param file the file to read for data
    */
   constructor(file: string) {
     this.part1 = this.readPart1(file);
+    this.part2 = this.readPart2();
   }
 
   /** Find how many safe rows */
@@ -96,6 +140,18 @@ export class Question {
     let sum = 0;
 
     for (const report of this.part1.data) {
+      sum += report.safe ? 1 : 0;
+    }
+
+    return sum;
+  }
+
+  /** Find how many safe ignoring just one error */
+  sumSafetyJustOne(): number {
+    let sum = this.sumSafety();
+
+    for (const report of this.part2.data) {
+      console.log(report);
       sum += report.safe ? 1 : 0;
     }
 
@@ -115,6 +171,25 @@ export class Question {
       output.data.push(new Report(line));
     }
     return output;
+  }
+
+  /**
+   * process the output for part 2
+   */
+  private readPart2(): DataPart1 {
+    const negatives: DataPart1 = {
+      data: [],
+    };
+
+    const reports = this.part1.data.slice();
+
+    for (const report of reports) {
+      if (!report.safe) {
+        negatives.data.push(report.readjust());
+      }
+    }
+
+    return negatives;
   }
 }
 
