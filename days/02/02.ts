@@ -3,6 +3,8 @@ import { Answer, open } from "../../src/types.ts";
 /** Maximum amount of difference between two values */
 const MaxDiff = 3;
 
+const MinDiff = 1;
+
 /** Direction of safety */
 enum Direction {
   Inc,
@@ -44,7 +46,7 @@ class Report implements ReportType {
           this.safe = false;
         }
 
-        if (Math.abs(first - second) > MaxDiff) this.safe = false;
+        if (!this.inRange(first, second)) this.safe = false;
       }
 
       // always make sure to write as long as a number
@@ -59,6 +61,17 @@ class Report implements ReportType {
    */
   private directionType(first: number, second: number): Direction {
     return first > second ? Direction.Dec : Direction.Inc;
+  }
+
+  /**
+   * validate the values are in range
+   * @param first the first number to check
+   * @param second the second number to check
+   */
+  private inRange(first: number, second: number): boolean {
+    const abs = Math.abs(first - second);
+
+    return abs >= MinDiff && abs <= MaxDiff;
   }
 }
 
