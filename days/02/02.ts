@@ -5,17 +5,9 @@ const MaxDiff = 3;
 
 const MinDiff = 1;
 
-/** Direction of safety */
-enum Direction {
-  Inc,
-  Dec,
-}
-
 /** Identifies what each row should contain */
 interface ReportType {
   row: Array<number>;
-  /** what direction to identify safety */
-  direction?: Direction;
   /** whether a row is safe or not */
   safe: boolean;
 }
@@ -23,8 +15,7 @@ interface ReportType {
 /** Implements report type */
 class Report implements ReportType {
   row: Array<number>;
-  safe = true;
-  direction?: Direction;
+  safe = false;
 
   /**
    * @param line the raw string to produce a Row from
@@ -34,90 +25,71 @@ class Report implements ReportType {
     const split = line.split(" ");
     this.row = new Array(split.length);
 
-    split.map((level, idx, arr) => {
+    split.map((level, idx, _) => {
       const first = parseInt(level);
-      const second = parseInt(arr[idx + 1]);
-
-      if (!isNaN(second)) {
-        const isSafe = this.isSafe(first, second);
-        if (!isSafe) this.safe = isSafe;
-      }
-
       // always make sure to write as long as a number
       if (!isNaN(first)) this.row[idx] = first;
     });
+
+    this.safe = this.isSafe(this.row);
   }
 
   /**
-   * Checks if two levels are safe or not
-   * @param first the first number to check
-   * @param second the second number to check
+   * Checks if all levels are safe or not
    */
-  isSafe(first: number, second: number): boolean {
-    const direction = this.directionType(first, second);
+  isSafe(row: Array<number>): boolean {
+    const deltas: Array<number> = [];
 
-    if (this.direction == undefined) {
-      this.direction = direction;
-    } else if (direction != this.direction) {
-      return false;
+    for (const i of row.keys()) {
+      const first = row[i];
+      const second = row[i + 1];
+
+      if (!isNaN(second)) {
+        // use delta to identify difference is between 1 or 3
+        const delta = first - second;
+        if (delta == 0) return false;
+
+        deltas.push(delta);
+      }
     }
 
-    if (!this.inRange(first, second)) return false;
+    // increasing value
+    let increasing = true;
+    for (const delta of deltas.values()) {
+      increasing = delta >= MinDiff && delta <= MaxDiff;
+      if (!increasing) break;
+    }
+    if (increasing) return true;
 
-    return true;
+    // decreasing value so check the reverse using negatives of max and min
+    let decreasing = false;
+    for (const delta of deltas.values()) {
+      decreasing = delta <= -1 * MinDiff && delta >= -1 * MaxDiff;
+      if (!decreasing) break;
+    }
+    if (decreasing) return true;
+
+    return false;
   }
 
   /** readjust the row popping 1 error */
   readjust(): Report {
     const report = new Report("");
-    report.direction = this.direction;
     report.row = this.row;
     report.safe = false;
 
     // element to skip
     for (const skip of this.row.keys()) {
-      let safe = true;
       // iterator to run through
       const check = this.row.toSpliced(skip, 1);
-      for (const i of check.keys()) {
-        const first = check[i];
-        const second = check[i + 1];
 
-        if (!isNaN(second)) {
-          if (!this.isSafe(first, second)) {
-            safe = false;
-            break;
-          }
-        }
-      }
-
-      if (safe) {
-        report.safe = safe;
+      if (this.isSafe(check)) {
+        report.safe = true;
         break;
       }
     }
 
     return report;
-  }
-
-  /**
-   * Find direction and set value
-   * @param first the first number to check
-   * @param second the second number to check
-   */
-  private directionType(first: number, second: number): Direction {
-    return first > second ? Direction.Dec : Direction.Inc;
-  }
-
-  /**
-   * validate the values are in range
-   * @param first the first number to check
-   * @param second the second number to check
-   */
-  private inRange(first: number, second: number): boolean {
-    const abs = Math.abs(first - second);
-
-    return abs >= MinDiff && abs <= MaxDiff;
   }
 }
 
