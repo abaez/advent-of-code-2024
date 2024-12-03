@@ -1,5 +1,8 @@
 import { Answer, open } from "../../src/types.ts";
 
+/** Maximum amount of difference between two values */
+const MaxDiff = 3;
+
 /** Direction of safety */
 enum Direction {
   Inc,
@@ -37,6 +40,8 @@ class Row implements RowType {
         } else if (direction != this.direction) {
           this.safe = false;
         }
+
+        if (Math.abs(first - second) > MaxDiff) this.safe = false;
       }
 
       // always make sure to write as long as a number
