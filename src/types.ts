@@ -23,5 +23,8 @@ export function dayRange(): number[] {
  * @param file the file to open
  */
 export function open(file: string): string[] {
-  return Deno.readTextFileSync(file).split("\n");
+  const result = Deno.readTextFileSync(file).split("\n");
+  // drop last line as empty
+  result.pop();
+  return result;
 }
