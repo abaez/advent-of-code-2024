@@ -8,7 +8,7 @@ Deno.test("can read data", () => {
 
   const question = new Question(sample);
 
-  const actual = question.part1.data[0].raw;
+  const actual = question.part1.data[0].row;
 
   assertEquals(actual, expect);
 });

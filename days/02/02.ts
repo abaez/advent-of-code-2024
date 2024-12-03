@@ -10,17 +10,17 @@ enum Direction {
 }
 
 /** Identifies what each row should contain */
-interface RowType {
-  raw: Array<number>;
+interface ReportType {
+  row: Array<number>;
   /** what direction to identify safety */
   direction?: Direction;
   /** whether a row is safe or not */
   safe: boolean;
 }
 
-/** Implemtns row type */
-class Row implements RowType {
-  raw: Array<number>;
+/** Implements report type */
+class Report implements ReportType {
+  row: Array<number>;
   safe = true;
   direction?: Direction;
 
@@ -29,10 +29,10 @@ class Row implements RowType {
    */
   constructor(line: string) {
     const split = line.split(" ");
-    this.raw = new Array(split.length);
+    this.row = new Array(split.length);
 
-    split.map((value, idx, arr) => {
-      const first = parseInt(value);
+    split.map((level, idx, arr) => {
+      const first = parseInt(level);
       const second = parseInt(arr[idx + 1]);
 
       if (!isNaN(second)) {
@@ -48,7 +48,7 @@ class Row implements RowType {
       }
 
       // always make sure to write as long as a number
-      if (!isNaN(first)) this.raw[idx] = first;
+      if (!isNaN(first)) this.row[idx] = first;
     });
   }
 
@@ -63,7 +63,7 @@ class Row implements RowType {
 }
 
 export interface DataPart1 {
-  data: Array<Row>;
+  data: Array<Report>;
 }
 
 /** Question logic */
@@ -82,8 +82,8 @@ export class Question {
   sumSafety(): number {
     let sum = 0;
 
-    for (const row of this.part1.data) {
-      sum += row.safe ? 1 : 0;
+    for (const report of this.part1.data) {
+      sum += report.safe ? 1 : 0;
     }
 
     return sum;
@@ -99,7 +99,7 @@ export class Question {
     };
 
     for (const line of open(file)) {
-      output.data.push(new Row(line));
+      output.data.push(new Report(line));
     }
     return output;
   }
