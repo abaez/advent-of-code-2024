@@ -70,27 +70,34 @@ class Report implements ReportType {
   /** readjust the row popping 1 error */
   readjust(): Report {
     const report = new Report("");
+    report.direction = this.direction;
+    report.row = this.row;
+    report.safe = true;
 
-    for (const i of this.row.keys()) {
-      const [first, second] = [this.row[i], this.row[i + 1]];
-      if (!isNaN(second)) {
-        if (!report.isSafe(first, second)) {
-          report.direction = this.direction;
-          report.safe = true;
+    // element to skip
+    for (const skip of this.row.keys()) {
+      let safe = true;
+      // iterator to run through
+      const check = this.row.toSpliced(skip, 1);
+      for (const i of check.keys()) {
+        const first = check[i];
+        const second = check[i + 1];
 
-          report.row = this.row.toSpliced(i, 1);
-          break;
+        if (!isNaN(second)) {
+          if (!this.isSafe(first, second)) {
+            safe = false;
+            break;
+          }
         }
       }
-    }
 
-    report.row.map((level, idx, arr) => {
-      const [first, second] = [level, arr[idx + 1]];
-      if (!isNaN(second)) {
-        // revert back to unsafe if more than 1 error
-        if (!report.inRange(first, second)) report.safe = false;
+      if (safe) {
+        report.safe = safe;
+        break;
+      } else {
+        report.safe = safe;
       }
-    });
+    }
 
     return report;
   }
@@ -152,7 +159,6 @@ export class Question {
     let sum = this.sumSafety();
 
     for (const report of this.part2.data) {
-      console.log(report);
       sum += report.safe ? 1 : 0;
     }
 
