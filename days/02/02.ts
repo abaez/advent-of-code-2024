@@ -76,8 +76,9 @@ class Report implements ReportType {
       if (!isNaN(second)) {
         if (!report.isSafe(first, second)) {
           report.direction = this.direction;
-          report.row = this.row.toSpliced(i, 1);
           report.safe = true;
+
+          report.row = this.row.toSpliced(i, 1);
           break;
         }
       }
@@ -199,5 +200,6 @@ export function result(): Answer {
 
   return {
     part1: question.sumSafety().toString(),
+    part2: question.sumSafetyJustOne().toString(),
   };
 }
