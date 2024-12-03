@@ -72,7 +72,7 @@ class Report implements ReportType {
     const report = new Report("");
     report.direction = this.direction;
     report.row = this.row;
-    report.safe = true;
+    report.safe = false;
 
     // element to skip
     for (const skip of this.row.keys()) {
@@ -94,8 +94,6 @@ class Report implements ReportType {
       if (safe) {
         report.safe = safe;
         break;
-      } else {
-        report.safe = safe;
       }
     }
 
