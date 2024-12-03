@@ -1,4 +1,5 @@
 import { result as day01 } from "./days/01/01.ts";
+import { result as day02 } from "./days/02/02.ts";
 import { handleArgs } from "./src/flags.ts";
 import { Answer, dayRange } from "./src/types.ts";
 
@@ -18,6 +19,10 @@ function dayPrompt(day: string) {
   switch (maybe) {
     case 1:
       result = day01();
+      break;
+
+    case 2:
+      result = day02();
       break;
 
     default:

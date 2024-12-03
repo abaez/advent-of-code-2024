@@ -28,7 +28,10 @@ class Row implements RowType {
    * @param line the raw string to produce a Row from
    */
   constructor(line: string) {
-    line.split(" ").map((value, idx, arr) => {
+    const split = line.split(" ");
+    this.raw = new Array(split.length);
+
+    split.map((value, idx, arr) => {
       const first = parseInt(value);
       const second = parseInt(arr[idx + 1]);
 
@@ -104,5 +107,9 @@ export class Question {
 
 /** Provides result output of day done */
 export function result(): Answer {
-  return {};
+  const question = new Question("./days/02/02.txt");
+
+  return {
+    part1: question.sumSafety().toString(),
+  };
 }
