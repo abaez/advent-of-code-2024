@@ -43,13 +43,20 @@ export class Section {
 
   /**
    * @param line the section line to parse
+   * @param conditions whether to use conditions or not on the check
    */
-  constructor(line: string) {
+  constructor(line: string, conditions: boolean = false) {
     // g used for grouping all
     const mulAll = new RegExp(/mul\(\d+,\d+\)/, "g");
     const mul = new RegExp(/(\d+,\d+)/);
+    const donts = new RegExp(/don't\(\).*do\(\)/);
 
-    line.match(mulAll)?.map((match) => {
+    const skip = line.match(donts)?.[0];
+    const output = skip != undefined && conditions
+      ? line.replace(skip, "")
+      : line;
+
+    output.match(mulAll)?.map((match) => {
       // get numbers if match by splitting and parsing the numbers
       const numbers = match
         .match(mul)?.[0]
