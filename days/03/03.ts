@@ -2,10 +2,13 @@ import { Answer, open } from "../../src/types.ts";
 
 /** Provides result output of day done */
 export function result(): Answer {
-  const question = new Question("./days/03/03.txt");
+  const file = "./days/03/03.txt";
+  const question = new Question(file);
+  const questionPart2 = new Question(file, true);
 
   return {
     part1: question.sum().toString(),
+    part2: questionPart2.sum().toString(),
   };
 }
 
@@ -19,9 +22,9 @@ export class Question {
   /**
    * @param file to process for sections
    */
-  constructor(file: string) {
+  constructor(file: string, condition: boolean = false) {
     for (const line of open(file)) {
-      this.sections.push(new Section(line));
+      this.sections.push(new Section(line, condition));
     }
   }
 
