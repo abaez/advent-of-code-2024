@@ -1,8 +1,37 @@
-import { Answer } from "../../src/types.ts";
+import { Answer, open } from "../../src/types.ts";
 
 /** Provides result output of day done */
 export function result(): Answer {
-  return {};
+  const question = new Question("./days/03/03.txt");
+
+  return {
+    part1: question.sum().toString(),
+  };
+}
+
+/**
+ * Processed question response
+ */
+export class Question {
+  /** an array of sections identified */
+  private sections: Array<Section> = [];
+
+  /**
+   * @param file to process for sections
+   */
+  constructor(file: string) {
+    for (const line of open(file)) {
+      this.sections.push(new Section(line));
+    }
+  }
+
+  /** gathers all the sums of each section and multiplies them */
+  sum(): number {
+    return this
+      .sections
+      .map((section) => section.sum())
+      .reduce((sum, mul) => sum + mul);
+  }
 }
 
 /**
