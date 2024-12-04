@@ -1,5 +1,15 @@
 import { Answer, open } from "../../src/types.ts";
 
+/** result method used for all other actions */
+export function result(): Answer {
+  const question = new Question("./inputs/01.txt");
+
+  return {
+    part1: question.distanceSum().toString(),
+    part2: question.distanceSame().toString(),
+  };
+}
+
 export interface DataPart1 {
   first: Array<number>;
   second: Array<number>;
@@ -123,14 +133,4 @@ export class Question {
       second: this.dataPart1.second.sort(),
     };
   }
-}
-
-/** result method used for all other actions */
-export function result(): Answer {
-  const question = new Question("./inputs/01.txt");
-
-  return {
-    part1: question.distanceSum().toString(),
-    part2: question.distanceSame().toString(),
-  };
 }

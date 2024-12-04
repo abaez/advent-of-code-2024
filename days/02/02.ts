@@ -1,5 +1,15 @@
 import { Answer, open } from "../../src/types.ts";
 
+/** Provides result output of day done */
+export function result(): Answer {
+  const question = new Question("./inputs/02.txt");
+
+  return {
+    part1: question.sumSafety().toString(),
+    part2: question.sumSafetyJustOne().toString(),
+  };
+}
+
 /** Maximum amount of difference between two values */
 const MaxDiff = 3;
 
@@ -168,14 +178,4 @@ export class Question {
 
     return negatives;
   }
-}
-
-/** Provides result output of day done */
-export function result(): Answer {
-  const question = new Question("./inputs/02.txt");
-
-  return {
-    part1: question.sumSafety().toString(),
-    part2: question.sumSafetyJustOne().toString(),
-  };
 }
