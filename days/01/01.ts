@@ -127,7 +127,7 @@ export class Question {
 
 /** result method used for all other actions */
 export function result(): Answer {
-  const question = new Question("./days/01/01_part1.txt");
+  const question = new Question("./inputs/01.txt");
 
   return {
     part1: question.distanceSum().toString(),

@@ -6,7 +6,7 @@ const SamplePart1: DataPart1 = {
   second: [4, 3, 5, 3, 9, 3],
 };
 
-const sample = "days/01/01_part1_sample.txt";
+const sample = "days/01/sample.txt";
 
 Deno.test("can read data", () => {
   const expect = SamplePart1;

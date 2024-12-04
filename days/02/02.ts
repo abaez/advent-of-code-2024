@@ -172,7 +172,7 @@ export class Question {
 
 /** Provides result output of day done */
 export function result(): Answer {
-  const question = new Question("./days/02/02.txt");
+  const question = new Question("./inputs/02.txt");
 
   return {
     part1: question.sumSafety().toString(),

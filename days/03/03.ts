@@ -2,7 +2,7 @@ import { Answer, open } from "../../src/types.ts";
 
 /** Provides result output of day done */
 export function result(): Answer {
-  const file = "./days/03/03.txt";
+  const file = "./inputs/03.txt";
   const question = new Question(file);
   const questionPart2 = new Question(file, true);
 

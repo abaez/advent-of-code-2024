@@ -23,3 +23,6 @@ result
 
 # ignore docs generation
 docs
+
+# ignore inputs
+inputs

@@ -1,7 +1,7 @@
 import { assertEquals } from "jsr:@std/assert";
 import { Question } from "./02.ts";
 
-const sample = "days/02/02_sample.txt";
+const sample = "days/02/sample.txt";
 
 Deno.test("can read data", () => {
   const expect = [7, 6, 4, 2, 1];
