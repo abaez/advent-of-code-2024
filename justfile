@@ -21,3 +21,8 @@
 # run deno tests
 @test:
     deno test --allow-read
+
+# run deno test for a single day
+@test-day day:
+    deno test --allow-read ./days/{{ day }}
+
