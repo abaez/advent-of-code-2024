@@ -1,5 +1,5 @@
 # Temporary files, for example, from tests.
-/tmp/
+tmp/
 
 # ignore swp files
 .*.swp
