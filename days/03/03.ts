@@ -50,11 +50,11 @@ export class Section {
    */
   constructor(line: string, conditions: boolean = false) {
     // set up regular expression with groups
-    const mul = /(?<mul>mul\((?<f>\d+),(?<s>\d+)\))/;
+    const mul = /mul\((?<f>\d+),(?<s>\d+)\)/;
     const re = [
-      mul,
-      /(?<do>do\(\))/,
       /(?<dont>don't\(\))/,
+      /(?<do>do\(\))/,
+      mul,
     ]
       .map((exp) => exp.source)
       .join("|");
@@ -63,19 +63,20 @@ export class Section {
     const donts = new RegExp(re, "g");
 
     let enabled = true;
-    line.match(donts)?.map((match) => {
-      const groups = match.match(re)?.groups;
+
+    for (const match of line.matchAll(donts)) {
+      const groups = match.groups;
 
       if (groups?.dont != undefined && conditions) {
         enabled = false;
       } else if (groups?.do != undefined && conditions) {
         enabled = true;
-      } else if (groups?.mul != undefined && enabled) {
+      } else if (groups?.f != undefined && enabled) {
         const first = parseInt(groups.f);
         const second = parseInt(groups.s);
         this.row.push(first * second);
       }
-    });
+    }
   }
 
   /** retrieve sum of all values */
