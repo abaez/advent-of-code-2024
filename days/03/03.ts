@@ -69,17 +69,12 @@ export class Section {
       if (groups != undefined) {
         if (conditions) {
           if (groups.dont != undefined) enabled = false;
-          if (groups.do != undefined) enabled = true;
+          else if (groups.do != undefined) enabled = true;
         }
-        if (groups.mul != undefined) {
-          const mulGroups = groups.mul.match(mul)?.groups;
-          if (mulGroups != undefined) {
-            if (enabled) {
-              const first = parseInt(mulGroups.f);
-              const second = parseInt(mulGroups.s);
-              this.row.push(first * second);
-            }
-          }
+        if (groups.mul != undefined && enabled) {
+          const first = parseInt(groups.f);
+          const second = parseInt(groups.s);
+          this.row.push(first * second);
         }
       }
     });
