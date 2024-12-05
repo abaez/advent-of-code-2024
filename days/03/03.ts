@@ -53,8 +53,8 @@ export class Section {
     const mul = /(?<mul>mul\((?<f>\d+),(?<s>\d+)\))/;
     const re = [
       mul,
-      /(?<dont>don't\(\))/,
       /(?<do>do\(\))/,
+      /(?<dont>don't\(\))/,
     ]
       .map((exp) => exp.source)
       .join("|");
@@ -66,16 +66,14 @@ export class Section {
     line.match(donts)?.map((match) => {
       const groups = match.match(re)?.groups;
 
-      if (groups != undefined) {
-        if (conditions) {
-          if (groups.dont != undefined) enabled = false;
-          else if (groups.do != undefined) enabled = true;
-        }
-        if (groups.mul != undefined && enabled) {
-          const first = parseInt(groups.f);
-          const second = parseInt(groups.s);
-          this.row.push(first * second);
-        }
+      if (groups?.dont != undefined && conditions) {
+        enabled = false;
+      } else if (groups?.do != undefined && conditions) {
+        enabled = true;
+      } else if (groups?.mul != undefined && enabled) {
+        const first = parseInt(groups.f);
+        const second = parseInt(groups.s);
+        this.row.push(first * second);
       }
     });
   }
