@@ -49,25 +49,38 @@ export class Section {
    * @param conditions whether to use conditions or not on the check
    */
   constructor(line: string, conditions: boolean = false) {
+    // set up regular expression with groups
+    const mul = /(?<mul>mul\((?<f>\d+),(?<s>\d+)\))/;
+    const re = [
+      mul,
+      /(?<dont>don't\(\))/,
+      /(?<do>do\(\))/,
+    ]
+      .map((exp) => exp.source)
+      .join("|");
+
     // g used for grouping all
-    const mulAll = new RegExp(/mul\(\d+,\d+\)/, "g");
-    const mul = new RegExp(/(\d+,\d+)/);
-    const donts = new RegExp(/don't\(\).*do\(\)/);
+    const donts = new RegExp(re, "g");
 
-    const skip = line.match(donts)?.[0];
-    const output = skip != undefined && conditions
-      ? line.replace(skip, "")
-      : line;
+    let enabled = true;
+    line.match(donts)?.map((match) => {
+      const groups = match.match(re)?.groups;
 
-    output.match(mulAll)?.map((match) => {
-      // get numbers if match by splitting and parsing the numbers
-      const numbers = match
-        .match(mul)?.[0]
-        .split(",")
-        .map((rawNumber) => parseInt(rawNumber));
-
-      if (numbers != undefined) {
-        this.row.push(numbers[0] * numbers[1]);
+      if (groups != undefined) {
+        if (conditions) {
+          if (groups.dont != undefined) enabled = false;
+          if (groups.do != undefined) enabled = true;
+        }
+        if (groups.mul != undefined) {
+          const mulGroups = groups.mul.match(mul)?.groups;
+          if (mulGroups != undefined) {
+            if (enabled) {
+              const first = parseInt(mulGroups.f);
+              const second = parseInt(mulGroups.s);
+              this.row.push(first * second);
+            }
+          }
+        }
       }
     });
   }
