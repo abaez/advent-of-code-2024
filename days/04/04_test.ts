@@ -31,6 +31,17 @@ Deno.test("can have basic success", () => {
   assertEquals(actual, expect);
 });
 
+Deno.test("can size sample", () => {
+  const expect = {
+    height: 10,
+    width: 10,
+  };
+  const matrix = new Question("./samples/04.txt").part1;
+
+  assertEquals(matrix.height, expect.height, "height");
+  assertEquals(matrix.width, expect.width, "width");
+});
+
 Deno.test("can use filter sample", () => {
   const expect = 18;
 
