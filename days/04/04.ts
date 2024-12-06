@@ -18,7 +18,15 @@ export class Question {
   }
 
   sum(): number {
-    return 0;
+    let total = 0;
+
+    this.part1.raw.map((row, rowIndex) =>
+      row.map((_, columnIndex) => {
+        if (foundXmas(this.part1, rowIndex, columnIndex)) total++;
+      })
+    );
+
+    return total;
   }
 }
 
@@ -65,16 +73,14 @@ export function foundXmas(
   const height = matrix.height;
   const width = matrix.width;
   const word = "XMAS";
-
-  // exit early as not start of word
-  if (raw[row][column] !== word[0]) return false;
-
   const wordLength = word.length;
-
   // x and y are used to set the direction in which
   // word needs to be searched.
   const x = [-1, -1, -1, 0, 0, 1, 1, 1];
   const y = [-1, 0, 1, -1, 1, -1, 0, 1];
+
+  // exit early as not start of word
+  if (raw[row][column] !== word[0]) return false;
 
   for (let direction = 0; direction < x.length; direction++) {
     let currentX = row + x[direction];
