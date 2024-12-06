@@ -1,5 +1,5 @@
-import { assertEquals } from "jsr:@std/assert";
-import { Question, result } from "./04.ts";
+import { assert, assertEquals } from "jsr:@std/assert";
+import { foundXmas, Question, result } from "./04.ts";
 
 Deno.test("can get result", () => {
   assertEquals(result(), {});
@@ -14,6 +14,12 @@ Deno.test("can size matrix", () => {
 
   assertEquals(matrix.height, expect.height, "height");
   assertEquals(matrix.width, expect.width, "width");
+});
+
+Deno.test("can find xmas", () => {
+  const question = new Question("./samples/04_base.txt");
+  const actual = foundXmas(question.part1, 0, 2);
+  assert(actual);
 });
 
 Deno.test("can have basic success", () => {
