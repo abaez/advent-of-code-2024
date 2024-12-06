@@ -5,6 +5,17 @@ Deno.test("can get result", () => {
   assertEquals(result(), {});
 });
 
+Deno.test("can size matrix", () => {
+  const expect = {
+    height: 5,
+    width: 6,
+  };
+  const matrix = new Question("./samples/04_base.txt").part1;
+
+  assertEquals(matrix.height, expect.height, "height");
+  assertEquals(matrix.width, expect.width, "width");
+});
+
 Deno.test("can have basic success", () => {
   const expect = 4;
 
