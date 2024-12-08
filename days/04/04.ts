@@ -22,7 +22,8 @@ export class Question {
 
     this.part1.raw.map((row, rowIndex) =>
       row.map((_, columnIndex) => {
-        if (foundXmas(this.part1, rowIndex, columnIndex)) total++;
+        const found = foundXmas(this.part1, rowIndex, columnIndex, "XMAS");
+        if (found[0]) total += found[1];
       })
     );
 
@@ -68,11 +69,13 @@ export function foundXmas(
   matrix: Matrix,
   row: number,
   column: number,
-): boolean {
+  word: string = "XMAS",
+): [boolean, number] {
+  let result: [found: boolean, count: number] = [false, 0];
+
   const raw = matrix.raw;
   const height = matrix.height;
   const width = matrix.width;
-  const word = "XMAS";
   const wordLength = word.length;
   // x and y are used to set the direction in which
   // word needs to be searched.
@@ -80,7 +83,7 @@ export function foundXmas(
   const y = [-1, 0, 1, -1, 1, -1, 0, 1];
 
   // exit early as not start of word
-  if (raw[row][column] !== word[0]) return false;
+  if (raw[row][column] !== word[0]) return [false, 0];
 
   for (let direction = 0; direction < x.length; direction++) {
     let currentX = row + x[direction];
@@ -104,8 +107,11 @@ export function foundXmas(
     }
 
     // if word length matches with check length, then correct word
-    if (checkLength === wordLength) return true;
+    if (checkLength === wordLength) {
+      result[0] = true;
+      result[1] += 1;
+    }
   }
 
-  return false;
+  return result;
 }
