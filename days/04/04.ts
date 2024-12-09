@@ -12,21 +12,34 @@ export function result(): Answer {
 export class Question {
   /** matrix representation of file */
   part1: Matrix;
+  /** whether to handle matrix as part 2 or not */
+  readonly part2: boolean;
 
   /**
    * @param file the file to be read
+   * @param part2 whether to handle as part 2 or not
    */
-  constructor(file: string) {
+  constructor(file: string, part2: boolean = false) {
     const fr = open(file);
     this.part1 = new Matrix(fr);
+    this.part2 = part2;
   }
 
   sum(): number {
     let total = 0;
 
+    // set word
+    const word = this.part2 ? "MAS" : "XMAS";
+
     this.part1.raw.map((row, rowIndex) =>
       row.map((_, columnIndex) => {
-        const found = foundXmas(this.part1, rowIndex, columnIndex, "XMAS");
+        const found = foundXmas(
+          this.part1,
+          rowIndex,
+          columnIndex,
+          word,
+          this.part2,
+        );
         if (found[0]) total += found[1];
       })
     );
@@ -68,12 +81,14 @@ class Matrix {
  * @param matrix the matrix to look for the word
  * @param row the row currently looking from
  * @param column the column currently looking from
+ * @param part2 whether to handle as part 2 or not
  */
 export function foundXmas(
   matrix: Matrix,
   row: number,
   column: number,
   word: string = "XMAS",
+  part2: boolean = false,
 ): [boolean, number] {
   let result: [found: boolean, count: number] = [false, 0];
 

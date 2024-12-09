@@ -55,3 +55,12 @@ Deno.test("can use sample", () => {
 
   assertEquals(actual, expect);
 });
+
+Deno.test("can do part2 cross", () => {
+  const expect = 9;
+  const question = new Question("./samples/04_part2.txt", true);
+
+  const actual = question.sum();
+
+  assertEquals(actual, expect);
+});
