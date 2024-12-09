@@ -6,34 +6,36 @@ export function result(): Answer {
 
   return {
     part1: question.sum().toString(),
+    part2: question.sum(true).toString(),
   };
 }
 
 export class Question {
   /** matrix representation of file */
   part1: Matrix;
-  /** whether to handle matrix as part 2 or not */
-  readonly part2: boolean;
 
   /**
    * @param file the file to be read
    * @param part2 whether to handle as part 2 or not
    */
-  constructor(file: string, part2: boolean = false) {
+  constructor(file: string) {
     const fr = open(file);
     this.part1 = new Matrix(fr);
-    this.part2 = part2;
   }
 
-  sum(): number {
+  /**
+   * sum by numbers
+   * @param part2 run sum for part2
+   */
+  sum(part2: boolean = false): number {
     let total = 0;
 
     // set word
-    const word = this.part2 ? "MAS" : "XMAS";
+    const word = part2 ? "MAS" : "XMAS";
 
     this.part1.raw.map((row, rowIndex) =>
       row.map((_, columnIndex) => {
-        if (this.part2) {
+        if (part2) {
           const found = foundMas(
             this.part1,
             rowIndex,
