@@ -33,14 +33,23 @@ export class Question {
 
     this.part1.raw.map((row, rowIndex) =>
       row.map((_, columnIndex) => {
-        const found = foundXmas(
-          this.part1,
-          rowIndex,
-          columnIndex,
-          word,
-          this.part2,
-        );
-        if (found[0]) total += found[1];
+        if (this.part2) {
+          const found = foundMas(
+            this.part1,
+            rowIndex,
+            columnIndex,
+            word,
+          );
+          if (found[0]) total += found[1];
+        } else {
+          const found = foundXmas(
+            this.part1,
+            rowIndex,
+            columnIndex,
+            word,
+          );
+          if (found[0]) total += found[1];
+        }
       })
     );
 
@@ -88,7 +97,64 @@ export function foundXmas(
   row: number,
   column: number,
   word: string = "XMAS",
-  part2: boolean = false,
+): [boolean, number] {
+  let result: [found: boolean, count: number] = [false, 0];
+
+  const raw = matrix.raw;
+  const height = matrix.height;
+  const width = matrix.width;
+  const wordLength = word.length;
+  // x and y are used to set the direction in which
+  // word needs to be searched.
+  const x = [-1, -1, -1, 0, 0, 1, 1, 1];
+  const y = [-1, 0, 1, -1, 1, -1, 0, 1];
+
+  // exit early as not start of word
+  if (raw[row][column] !== word[0]) return [false, 0];
+
+  for (let direction = 0; direction < x.length; direction++) {
+    let currentX = row + x[direction];
+    let currentY = column + y[direction];
+    // use to check how far match has been completed
+    let checkLength = 1;
+
+    // First character is already checked, match remaining
+    // characters
+    for (checkLength = 1; checkLength < wordLength; checkLength++) {
+      // exit for out of boundary
+      if (
+        currentX >= height || currentX < 0 || currentY >= width || currentY < 0
+      ) break;
+
+      // exit if no match
+      if (raw[currentX][currentY] !== word[checkLength]) break;
+      //  Moving in particular direction
+      currentX += x[direction];
+      currentY += y[direction];
+    }
+
+    // if word length matches with check length, then correct word
+    if (checkLength === wordLength) {
+      result[0] = true;
+      result[1] += 1;
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Looks for the word mas in diagonals
+ * @param matrix the matrix to look for the word
+ * @param row the row currently looking from
+ * @param column the column currently looking from
+ * @param part2 whether to handle as part 2 or not
+ */
+export function foundMas(
+  matrix: Matrix,
+  row: number,
+  column: number,
+  word: string = "MAS",
 ): [boolean, number] {
   let result: [found: boolean, count: number] = [false, 0];
 
