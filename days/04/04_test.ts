@@ -1,9 +1,5 @@
 import { assert, assertEquals } from "jsr:@std/assert";
-import { foundXmas, Question, result } from "./04.ts";
-
-Deno.test("can get result", () => {
-  assertEquals(result(), {});
-});
+import { foundXmas, Question } from "./04.ts";
 
 Deno.test("can size matrix", () => {
   const expect = {

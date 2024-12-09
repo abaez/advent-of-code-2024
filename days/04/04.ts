@@ -2,7 +2,11 @@ import { Answer, open } from "../../src/types.ts";
 
 /** Provides result output of day done */
 export function result(): Answer {
-  return {};
+  const question = new Question("./inputs/04.txt");
+
+  return {
+    part1: question.sum().toString(),
+  };
 }
 
 export class Question {
