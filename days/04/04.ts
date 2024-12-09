@@ -162,23 +162,26 @@ export function foundMas(
   const height = matrix.height;
   const width = matrix.width;
   const wordLength = word.length;
-  // x and y are used to set the direction in which
-  // word needs to be searched.
-  const x = [-1, -1, -1, 0, 0, 1, 1, 1];
-  const y = [-1, 0, 1, -1, 1, -1, 0, 1];
+
+  const cross: Array<[x: number, y: number]> = [
+    [1, 1], // right diagonal up
+    [1, -1], // right diagonal down
+    [-1, -1], // left diagonal down
+    [-1, 1], // left diagonal up
+  ];
 
   // exit early as not start of word
-  if (raw[row][column] !== word[0]) return [false, 0];
+  if (raw[row][column] !== word[1]) return [false, 0];
 
-  for (let direction = 0; direction < x.length; direction++) {
-    let currentX = row + x[direction];
-    let currentY = column + y[direction];
+  for (let direction = 0; direction < cross.length; direction++) {
+    // starting possition has to be the opposite side
+    let currentX = row + (-1 * cross[direction][0]);
+    let currentY = column + (-1 * cross[direction][1]);
     // use to check how far match has been completed
-    let checkLength = 1;
+    let checkLength = 0;
 
-    // First character is already checked, match remaining
-    // characters
-    for (checkLength = 1; checkLength < wordLength; checkLength++) {
+    // checking all as unsure
+    for (; checkLength < wordLength; checkLength++) {
       // exit for out of boundary
       if (
         currentX >= height || currentX < 0 || currentY >= width || currentY < 0
@@ -186,15 +189,16 @@ export function foundMas(
 
       // exit if no match
       if (raw[currentX][currentY] !== word[checkLength]) break;
+
       //  Moving in particular direction
-      currentX += x[direction];
-      currentY += y[direction];
+      currentX += cross[direction][0];
+      currentY += cross[direction][1];
     }
 
     // if word length matches with check length, then correct word
     if (checkLength === wordLength) {
       result[0] = true;
-      result[1] += 1;
+      result[1] += 0.5;
     }
   }
 
