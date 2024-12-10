@@ -1,10 +1,7 @@
 import { Answer, open } from "../../src/types.ts";
 
-/** set of number to match */
-type PageSet = [x: number, y: number];
-
-/** assign page ordering */
-type PageSets = Array<PageSet>;
+/** Page sets to be used to find mapping */
+type PageSets = Map<number, Set<number>>;
 
 /** Order of updates */
 type PageUpdates = Array<Array<number>>;
@@ -37,7 +34,7 @@ export class Question {
  */
 class Pages {
   /** the page sets used for figuring order */
-  sets: PageSets = [];
+  sets: PageSets = new Map();
   /** what are the updates of pages */
   updates: PageUpdates = [];
 
@@ -48,7 +45,13 @@ class Pages {
     for (const line of rawData) {
       const maybeSet = this.getSet(line);
       if (maybeSet !== null) {
-        this.sets.push(maybeSet);
+        const [key, value] = maybeSet;
+        if (this.sets.has(key)) {
+          const got = this.sets.get(key)?.add(value);
+          if (got != undefined) {
+            this.sets.set(key, got);
+          }
+        }
         continue;
       }
 
@@ -63,7 +66,7 @@ class Pages {
    * Gets a pageset if exists
    * @param line the string be validated
    */
-  getSet(line: string): PageSet | null {
+  getSet(line: string): [key: number, behind: number] | null {
     const result = line
       .match(/(\d+)\|(\d+)/g)
       ?.map((num) => parseInt(num));

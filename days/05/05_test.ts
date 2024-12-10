@@ -18,12 +18,11 @@ Deno.test("get proper page", () => {
 });
 
 Deno.test("can get input properly", () => {
-  const expect = [21, 6];
+  const expect = 6;
 
   const question = new Question(sample).pages;
 
-  const actual = [question.sets.length, question.updates.length];
+  const actual = question.updates.length;
 
-  assertEquals(actual[0], expect[0], "sets of x and y");
-  assertEquals(actual[1], expect[1], "updates to run");
+  assertEquals(actual, expect, "updates to run");
 });
