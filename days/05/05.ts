@@ -24,6 +24,13 @@ export class Question {
     this.pages = new Pages(raw);
   }
 
+  /** finds all the sorted sets */
+  findSorted(): PageUpdates {
+    return this.pages.updates
+      .filter((checkLine) => this.pages.isSorted(checkLine));
+  }
+
+  /** sum all the middle value of sorted sets */
   sum(): number {
     return 0;
   }
@@ -51,6 +58,9 @@ class Pages {
           if (got != undefined) {
             this.sets.set(key, got);
           }
+        } else {
+          const set = new Set<number>([value]);
+          this.sets.set(key, set);
         }
         continue;
       }
@@ -62,16 +72,38 @@ class Pages {
     }
   }
 
+  /** checks if update line is properly sorted */
+  isSorted(line: Array<number>): boolean {
+    return line.every((check) => {
+      const gots = this.sets.get(check);
+      // exit as true as number doesn't exist so can be anywhere
+      if (gots == undefined) return true;
+
+      // travel through the list until number found
+      for (let next = 0; line.length; next++) {
+        const compare = line[next];
+        if (compare != check) {
+          // found the numbe in front
+          if (gots.has(compare)) return false;
+        } else {
+          // reached the number, so exit true
+          return true;
+        }
+      }
+    });
+  }
+
   /**
    * Gets a pageset if exists
    * @param line the string be validated
    */
   private findSet(line: string): [key: number, behind: number] | null {
     const result = line
-      .match(/(\d+)\|(\d+)/g)
+      .match(/(\d+)\|(\d+)/)
       ?.map((num) => parseInt(num));
 
-    return (result == undefined) ? null : [result[0], result[1]];
+    // use 1st and 2nd item as initial will be the first match
+    return (result == undefined) ? null : [result[1], result[2]];
   }
 
   /**

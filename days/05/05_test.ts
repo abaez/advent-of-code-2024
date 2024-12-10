@@ -26,3 +26,14 @@ Deno.test("can get input properly", () => {
 
   assertEquals(actual, expect, "updates to run");
 });
+
+Deno.test("can validate is sorted", () => {
+  const expect = 3;
+  const question = new Question(sample);
+
+  const sorted = question.findSorted();
+
+  const actual = sorted.length;
+
+  assertEquals(actual, expect);
+});
