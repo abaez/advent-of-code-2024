@@ -32,7 +32,14 @@ export class Question {
 
   /** sum all the middle value of sorted sets */
   sum(): number {
-    return 0;
+    let result = 0;
+
+    for (const updates of this.findSorted()) {
+      const middle = Math.ceil(updates.length / 2);
+      result += updates[middle - 1];
+    }
+
+    return result;
   }
 }
 
