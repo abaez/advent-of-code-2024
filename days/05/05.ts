@@ -43,7 +43,7 @@ class Pages {
    */
   constructor(rawData: string[]) {
     for (const line of rawData) {
-      const maybeSet = this.getSet(line);
+      const maybeSet = this.findSet(line);
       if (maybeSet !== null) {
         const [key, value] = maybeSet;
         if (this.sets.has(key)) {
@@ -55,7 +55,7 @@ class Pages {
         continue;
       }
 
-      const maybeUpdate = this.getUpdate(line);
+      const maybeUpdate = this.findUpdate(line);
       if (maybeUpdate !== null) {
         this.updates.push(maybeUpdate);
       }
@@ -66,7 +66,7 @@ class Pages {
    * Gets a pageset if exists
    * @param line the string be validated
    */
-  getSet(line: string): [key: number, behind: number] | null {
+  private findSet(line: string): [key: number, behind: number] | null {
     const result = line
       .match(/(\d+)\|(\d+)/g)
       ?.map((num) => parseInt(num));
@@ -78,7 +78,7 @@ class Pages {
    * Gets an update line if exists
    * @param line the string line to be validated
    */
-  getUpdate(line: string): Array<number> | null {
+  private findUpdate(line: string): Array<number> | null {
     if (line.match(/,/)?.[0] != undefined) {
       return line
         .split(",")
