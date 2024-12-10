@@ -1,11 +1,7 @@
 import { assertEquals } from "jsr:@std/assert";
-import { Question, result } from "./05.ts";
+import { Question } from "./05.ts";
 
 const sample = "./samples/05.txt";
-
-Deno.test("can get result", () => {
-  assertEquals(result(), {});
-});
 
 Deno.test("get proper page", () => {
   const expect = 143;

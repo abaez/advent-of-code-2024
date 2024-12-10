@@ -8,7 +8,10 @@ type PageUpdates = Array<Array<number>>;
 
 /** Provides result output of day done */
 export function result(): Answer {
-  return {};
+  const question = new Question("./inputs/05.txt");
+  return {
+    part1: question.sum().toString(),
+  };
 }
 
 /** Question abstract for answers */
