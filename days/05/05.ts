@@ -33,11 +33,29 @@ export class Question {
       .filter((checkLine) => this.pages.isSorted(checkLine));
   }
 
+  /** finds all unsorted */
+  findUnsorted(): PageUpdates {
+    return this.pages.updates
+      .filter((checkLine) => !this.pages.isSorted(checkLine));
+  }
+
   /** sum all the middle value of sorted sets */
   sum(): number {
     let result = 0;
 
     for (const updates of this.findSorted()) {
+      const middle = Math.ceil(updates.length / 2);
+      result += updates[middle - 1];
+    }
+
+    return result;
+  }
+
+  /** sum all the middle value of unsorted sets sorted */
+  sumUnsorted(): number {
+    let result = 0;
+
+    for (const updates of this.findUnsorted()) {
       const middle = Math.ceil(updates.length / 2);
       result += updates[middle - 1];
     }

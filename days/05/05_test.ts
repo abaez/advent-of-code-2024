@@ -33,3 +33,14 @@ Deno.test("can validate is sorted", () => {
 
   assertEquals(actual, expect);
 });
+
+Deno.test("can sum unsorted proper page", () => {
+  const expect = 123;
+  const question = new Question(sample);
+
+  const sorted = question.findSorted();
+
+  const actual = sorted.length;
+
+  assertEquals(actual, expect);
+});
