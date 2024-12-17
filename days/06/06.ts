@@ -10,9 +10,9 @@ type Position = [x: number, y: number, facing: string];
 
 // Guard facing to direction
 const GuardDirection: Map<string, Position> = new Map([
-  ["^", [0, 1, "^"]],
+  ["^", [0, -1, "^"]],
   [">", [1, 0, ">"]],
-  ["v", [0, -1, "v"]],
+  ["v", [0, 1, "v"]],
   ["<", [-1, 0, "<"]],
 ]);
 
