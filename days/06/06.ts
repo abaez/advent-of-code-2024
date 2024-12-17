@@ -57,6 +57,11 @@ class TheMap {
         this.position = [row, column, this.direction[2]];
       }
 
+      const chars = line.split("");
+
+      // zero based array for route
+      this.route.push([...Array(chars.length)].map((_) => 0));
+
       this.raw.push(line.split(""));
     });
     row++;
