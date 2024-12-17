@@ -59,7 +59,7 @@ class TheMap {
       if (maybe != undefined) {
         let column: number = 0;
         [this.direction, column] = maybe;
-        this.position = [row, column, this.direction[2]];
+        this.position = [column, row, this.direction[2]];
       }
 
       const chars = line.split("");
@@ -90,7 +90,7 @@ class TheMap {
       if (this.inBound(xMove, yMove, xMax, yMax)) {
         // change direction
         if (this.raw[yMove][xMove] == "#") {
-          const direction = this.rotateDirection(this.position[2]);
+          const direction = this.rotateDirection(this.direction[2]);
           if (direction != undefined) this.direction = direction;
         } else {
           this.route[y][x] = 1;
@@ -98,6 +98,7 @@ class TheMap {
           y = yMove;
         }
       } else {
+        this.route[y][x] = 1;
         break;
       }
     }
