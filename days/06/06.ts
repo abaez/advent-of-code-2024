@@ -1,4 +1,3 @@
-import { diffStr } from "jsr:@std/internal@^1.0.5/diff-str";
 import { Answer, open } from "../../src/types.ts";
 
 /** Provides result output of day done */
@@ -26,7 +25,13 @@ export class Question {
   }
 
   sum(): number {
-    return 0;
+    const endPosition = this.theMap.pathTraversal();
+
+    return this.theMap.route
+      // get all integers on row
+      .map((row) => row.reduce((sum, num) => sum + num))
+      // get all columns now and sum
+      .reduce((col, num) => col + num);
   }
 }
 
@@ -35,7 +40,7 @@ class TheMap {
   /** the raw map without changing */
   private raw: Array<Array<string>> = [];
   /** the map identifying the route taken */
-  private route: Array<Array<number>> = [];
+  readonly route: Array<Array<number>> = [];
   /** the direction of the guard */
   private direction: Position = [0, 0, ""];
   /** the position of the guard */
@@ -63,8 +68,46 @@ class TheMap {
       this.route.push([...Array(chars.length)].map((_) => 0));
 
       this.raw.push(line.split(""));
+      row++;
     });
-    row++;
+  }
+
+  /**
+   * path traversal of guard from position
+   */
+  pathTraversal(): Position {
+    const xMax = this.raw[0].length;
+    const yMax = this.raw.length;
+
+    let x = this.position[0];
+    let y = this.position[1];
+
+    while (this.inBound(x, y, xMax, yMax)) {
+      const xMove = x + this.direction[0];
+      const yMove = y + this.direction[1];
+
+      // try current direction
+      if (this.inBound(xMove, yMove, xMax, yMax)) {
+        // change direction
+        if (this.raw[yMove][xMove] == "#") {
+          const direction = this.rotateDirection(this.position[2]);
+          if (direction != undefined) this.direction = direction;
+        } else {
+          this.route[y][x] = 1;
+          x = xMove;
+          y = yMove;
+        }
+      } else {
+        break;
+      }
+    }
+
+    return this.position;
+  }
+
+  private inBound(x: number, y: number, xMax: number, yMax: number): boolean {
+    if ((0 <= x && x < xMax) && (0 <= y && y < yMax)) return true;
+    return false;
   }
 
   /**
