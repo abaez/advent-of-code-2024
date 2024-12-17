@@ -2,7 +2,11 @@ import { Answer, open } from "../../src/types.ts";
 
 /** Provides result output of day done */
 export function result(): Answer {
-  return {};
+  const question = new Question("./inputs/06.txt");
+
+  return {
+    part1: question.sum().toString(),
+  };
 }
 
 // alias for position facing direction
