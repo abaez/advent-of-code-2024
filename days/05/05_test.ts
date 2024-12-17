@@ -38,9 +38,9 @@ Deno.test("can sum unsorted proper page", () => {
   const expect = 123;
   const question = new Question(sample);
 
-  const sorted = question.findSorted();
+  //const sorted = question.findUnsorted();
 
-  const actual = sorted.length;
+  const actual = question.sumUnsorted();
 
   assertEquals(actual, expect);
 });

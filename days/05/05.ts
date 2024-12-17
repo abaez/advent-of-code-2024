@@ -11,6 +11,7 @@ export function result(): Answer {
   const question = new Question("./inputs/05.txt");
   return {
     part1: question.sum().toString(),
+    part2: question.sumUnsorted().toString(),
   };
 }
 
@@ -33,10 +34,12 @@ export class Question {
       .filter((checkLine) => this.pages.isSorted(checkLine));
   }
 
-  /** finds all unsorted */
+  /** finds all unsorted and sort */
   findUnsorted(): PageUpdates {
     return this.pages.updates
-      .filter((checkLine) => !this.pages.isSorted(checkLine));
+      .filter((checkLine) => !this.pages.isSorted(checkLine))
+      // sort the unsorted
+      .map((unsorted) => this.pages.sort(unsorted));
   }
 
   /** sum all the middle value of sorted sets */
@@ -119,6 +122,37 @@ class Pages {
         }
       }
     });
+  }
+
+  sort(line: Array<number>): Array<number> {
+    let oneSort: Array<number> = [];
+
+    for (let base = 0; base < line.length; base++) {
+      const baseNum = line[base];
+      const gots = this.sets.get(baseNum);
+
+      // not necessary to validate
+      if (gots == undefined) continue;
+
+      for (let check = 0; check < line.length; check++) {
+        const checkNum = line[check];
+
+        if (base != check) {
+          if (gots.has(checkNum)) {
+            // set check numNum in original element of base
+            oneSort = line.toSpliced(base, 1, checkNum);
+            // now swap check with base spot
+            oneSort = oneSort.toSpliced(check, 1, baseNum);
+
+            return this.sort(oneSort);
+          }
+        } else {
+          break;
+        }
+      }
+    }
+
+    return (oneSort.length == 0) ? line : oneSort;
   }
 
   /**
